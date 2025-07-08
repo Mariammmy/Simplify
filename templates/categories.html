@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if current_user.role == 'admin' %}
+    <a href="/category/add_category" class="btn btn-success">Add category</a>
+    {% endif %}
+  
+
+    {% for category in category_list %}
+    <br>
+    <br>
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 30px;">
+    <div class="card col-10" >
+      <img src="/static/images/{{ category['image'] }}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{category['Name']}}</h5>
+        <p class="card-text">{{category['Description']}}</p>
+        <a href="{{category['Link']}}" class="btn btn-primary">Explore courses</a>
+        {% if current_user.role == 'admin' %}
+          <a href="/category/{{category}}/edit_category/{{ category['id'] }}" class="btn btn-warning">Edit</a>
+          <a href="/category/{{category}}/delete_category/{{ category['id'] }}" class="btn btn-danger">Delete</a>
+        {% endif %}
+
+      </div>
+    </div>
+    </div>
+
+    {% endfor %}
+{% endblock %}

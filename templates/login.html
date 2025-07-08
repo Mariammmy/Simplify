@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} Authorization page {% endblock %}
+
+{% block content%}
+
+<div class="row center">
+    <form class="col-lg-5" method="post" enctype="multipart/form-data">
+        {% for errors in form.errors.values() %}
+            {% for error in errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endfor %}
+        {% endfor %}
+
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3 row">
+            {{ form.username(class="form-control", placeholder=form.username.label.text) }}
+        </div>
+        <div class="mb-3 row">
+            {{ form.password(class="form-control", placeholder=form.password.label.text) }}
+        </div>
+
+        <div class="mb-3 row">
+            {{ form.login_button(class="btn btn-success", placeholder=form.login_button.label.text) }}
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}
