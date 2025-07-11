@@ -19,6 +19,15 @@
     </li>
 </div>
 <div class="col-11 col-lg-6">
+    {% for user in user_list%}
+    <div class="card mb-3 col-3" >
+        <div class="card-body">
+            <h1 class="card-title">{{user['username']}}</h1>
+            <p class="card-text">{{user['role']}}</p>
+            <p class="card-text">{{user['id']}}</p>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 </div>
 {% endblock %}

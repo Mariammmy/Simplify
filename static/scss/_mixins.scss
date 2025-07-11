@@ -1,0 +1,28 @@
+@mixin go-flex($dir: row, $wrap: nowrap, $justify: center, $align: center) {
+    display: flex;
+    flex-direction: $dir;
+    flex-wrap: $wrap;
+    justify-content: $justify;
+    align-items: $align;
+  }
+  
+  @mixin w-h($width, $height) {
+    width: $width;
+    height: $height;
+  }
+
+  @mixin hover-grow{ 
+    transition: transform 0.3s
+    ease-in-out; 
+    &:hover { 
+      transform: scale(1.1);  
+    } 
+  }
+
+  @mixin hover-grow1{ 
+    transition: transform 0.3s
+    ease-in-out; 
+    &:hover { 
+      transform: scale(1.05);  
+    } 
+  }

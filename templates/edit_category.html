@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} Add Category {% endblock %}
+{% block content %}
+    <div class="center">
+    <form class="col-lg-6" method="post" enctype="multipart/form-data" style="justify-self: center;">
+      {% for errors in form.errors.values() %}
+        {% for error in errors %}
+        <div class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
+        {% endfor %}
+      {% endfor %}
+      {{ form.hidden_tag() }}
+      <div class="mb-3 row">
+          {{ form.name(class="form-control", placeholder=form.name.label.text) }}
+        </div>
+      <div class="mb-3 row">
+          {{ form.description(class="form-control", placeholder=form.description.label.text) }}
+        </div>
+      <div class="mb-3 row">
+          {{ form.link(class="form-control", placeholder=form.link.label.text) }}
+        </div>
+      <div class="mb-3 row">
+          {{ form.image.label }}
+          {{ form.image(class="form-control") }}
+        </div>
+      <div class="mb-3 row">
+          {{ form.upload_button(class="btn btn-success", placeholder=form.upload_button.label.text) }}
+        </div>
+      </form>
+</div>
+{% endblock %}

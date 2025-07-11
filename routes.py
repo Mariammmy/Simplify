@@ -5,6 +5,8 @@ from os import path
 from models import Article, User, Category
 from flask_login import current_user, login_user, logout_user, login_required
 from functools import wraps
+from sqlalchemy.sql.expression import func
+
 
 
 
@@ -20,7 +22,8 @@ def admin_required(f):
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    article_list = Article.query.order_by(func.random()).limit(6).all()
+    return render_template("index.html", article_list=article_list)
 
 @app.route("/sign-up", methods=["GET", "POST"])
 @app.route("/register", methods=["GET", "POST"])
@@ -68,7 +71,8 @@ def admin_panel():
 @login_required
 @admin_required
 def users():
-    return render_template("admin/users.html")
+    user_list = User.query.all()
+    return render_template("admin/users.html", user_list=user_list)
 
 @app.route('/feedbacks')
 @login_required
@@ -111,14 +115,14 @@ def delete_category(category_id):
 @app.route("/category/<category_name>/edit_category/<int:category_id>", methods=["GET", "POST"])
 @login_required
 @admin_required
-def edit_article(category_id, category_name):
+def edit_category(category_id, category_name):
     category = Category.query.get(category_id)
-    form = AddForm(Name=category.name, description=category.description, Link=category.link)
+    form = CategoryForm(name=category.Name, description=category.Description, link=category.Link)
     
     if form.validate_on_submit():
-        category.name = form.name.data
-        category.release_year = form.release_year.data
-
+        category.Name = form.name.data
+        category.Description = form.description.data
+        category.Link = form.link.data
         image = form.image.data
         directory = path.join(app.root_path, "static", "images", image.filename)
         image.save(directory)
@@ -126,12 +130,12 @@ def edit_article(category_id, category_name):
 
         db.session.commit()
         return redirect("/")
-    return render_template("edit.html", form=form, category=category_name)
+    return render_template("edit_category.html", form=form, category=category_name)
 
 
 @app.route('/category/<category_name>')
 def category_page(category_name):
-    category_list = Category.query.filter_by(Name=category_name).first()
+    category_list = Category.query.filter_by(Name=category_name).all()
     article_list = Article.query.filter_by(category=category_name).all()
     return render_template('category.html', article_list=article_list, category_list=category_list)
 
@@ -158,7 +162,7 @@ def add_course(category_name):
         Article.create(new_article)
 
         return redirect("/")
-    return render_template("add.html", form=form, category=category_name,)
+    return render_template("add.html", form=form, category=category_name)
 
 @app.route("/category/<category_name>/delete_article/<int:article_id>")
 @login_required
@@ -172,7 +176,7 @@ def delete_article(article_id, category_name):
 @app.route("/category/<category_name>/edit_article/<int:article_id>", methods=["GET", "POST"])
 @login_required
 @admin_required
-def edit_category(article_id, category_name):
+def edit_article(article_id, category_name):
     article = Article.query.get(article_id)
     form = AddForm(heading=article.heading, summary=article.summary, category=article.category, description=article.description, subheading1=article.Subheading1, subheading2=article.Subheading2, subheading3=article.Subheading3,
                     subheading4 = article.Subheading4, subheading5 = article.Subheading5, text1 = article.text1, text2 = article.text2,

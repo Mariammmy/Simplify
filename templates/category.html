@@ -10,12 +10,11 @@
             <p class="card-text">{{category['Description']}}</p>
         </div>
     </div>
-    {% endfor %}
-
     <div>
     {% if current_user.role == 'admin' %}
     <a href="/category/{{category}}/add-course" class="btn btn-success">Add course</a>
     {% endif %}
+        {% endfor %}
     </div>
     {% for article in article_list %}
     <div class="card" style="width: 18rem;">
