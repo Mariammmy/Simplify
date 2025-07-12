@@ -46,12 +46,15 @@ class Category(db.Model, BaseModel):
     Link = db.Column(db.String(), nullable=False)
 
 
-class Review(db.Model, BaseModel):
-    __tablename__ = "reviews"
+class Feedback(db.Model, BaseModel):
+    __tablename__ = "feedbacks"
 
     id = db.Column(db.Integer(), primary_key=True)
-    text = db.Column(db.String(), nullable=False)
-    movie_id = db.Column(ForeignKey("articles.id"))
+    user_id = db.Column(db.Integer(), db.ForeignKey("users.id"), nullable=False)
+    headline = db.Column(db.String(), nullable=False)
+    message = db.Column(db.Text(), nullable=False)
+    user_id = db.Column(db.Integer(), db.ForeignKey("users.id"), nullable=False)
+
 
 class User(db.Model, BaseModel, UserMixin):
     __tablename__ = "users"
@@ -60,6 +63,8 @@ class User(db.Model, BaseModel, UserMixin):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String())
     role = db.Column(db.String())
+    profile_pic = db.Column(db.String(), default="logo.jpg")
+    email = db.Column(db.String(), nullable=False, unique=True)
 
     def __init__(self, username, password, role="Guest"):
         self.username = username

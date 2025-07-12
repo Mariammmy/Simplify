@@ -12,7 +12,7 @@
     </div>
     <div>
     {% if current_user.role == 'admin' %}
-    <a href="/category/{{category}}/add-course" class="btn btn-success">Add course</a>
+    <a href="/category/category/add-course" class="btn btn-success">Add course</a>
     {% endif %}
         {% endfor %}
     </div>
@@ -25,8 +25,8 @@
         <p class="card-text">{{ article['description'] }}</p>
         <a href="/category/{{category}}/{{article['id']}}" class="btn btn-primary me-3">Learn more >></a>
         {% if current_user.role == 'admin' %}
-        <a href="/category/{{category}}/delete_article/{{ article['id'] }}" class="btn btn-danger mt-2 me-2">Delete</a>
-        <a href="/category/{{category}}/edit_article/{{article['id'] }}" class="btn btn-warning mt-2">Add info</a>
+        <a href="/category/{{ article['category'] }}/delete_article/{{ article['id'] }}" class="btn btn-danger mt-2 me-2">Delete</a>
+        <a href="/category/{{ article['category'] }}/edit_article/{{article['id'] }}" class="btn btn-warning mt-2">Add info</a>
         {% endif %}
     </div>
     </div>

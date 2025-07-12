@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
 {% block content%}
-    
+    <h1>{{ user.username }}</h1>
+    <p>Email: {{ user.email }}</p>
+    <p>Bio: {{ user.bio or "No bio yet, diva." }}</p>
+    <img src="{{user.image}}">
 {% endblock %}

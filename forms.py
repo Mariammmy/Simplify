@@ -81,3 +81,9 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password")
 
     login_button = SubmitField("Log in") 
+
+class FeedbackForm(FlaskForm):
+    headline = StringField("Headline", validators=
+                           [DataRequired()])
+    message = StringField("Message", validators=
+                           [DataRequired()])

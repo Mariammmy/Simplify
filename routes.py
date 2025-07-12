@@ -1,6 +1,6 @@
 from flask import render_template, redirect, flash, url_for
 from ext import app, db, login_manager
-from forms import RegisterForm, AddForm, LoginForm, CategoryForm
+from forms import RegisterForm, AddForm, LoginForm, CategoryForm, FeedbackForm
 from os import path
 from models import Article, User, Category
 from flask_login import current_user, login_user, logout_user, login_required
@@ -57,15 +57,18 @@ def logout():
     logout_user()
     return redirect("/")
 
-@app.route("/profile")
+@app.route('/profile')
+@login_required
 def profile():
-    return render_template("profile.html")
+    user = current_user 
+    return render_template('profile.html', user=user)
 
 @app.route('/admin_panel')
 @login_required
 @admin_required
 def admin_panel():
-    return render_template("admin/admin.html")
+    user = current_user 
+    return render_template("admin/admin.html", user=user)
 
 @app.route('/users')
 @login_required
@@ -193,4 +196,10 @@ def edit_article(article_id, category_name):
 
         db.session.commit()
         return redirect("/")
-    return render_template("edit.html", form=form, category=category_name)
+    return render_template("add.html", form=form, category=category_name)
+
+@app.route("/feedback")
+@login_required
+def feedback():
+    form = FeedbackForm( user_id=current_user.id, headline = form.headline.data, message = form.message.data)
+    return render_template("feedback.html", form=form)

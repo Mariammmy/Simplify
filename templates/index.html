@@ -122,7 +122,10 @@
 </div>
 <div style="display: flex; align-items: center; justify-content: space-between;">
   <h2>Courses:</h2>
-  {% for article in article_list %}
+  <a href="/category" style="text-decoration: none;"> <h5>See more >> </h5> </a>
+</div>
+<div style="display: flex; justify-content: flex-start; gap: 30px; flex-wrap: wrap;">
+    {% for article in article_list %}
 <div class="card" style="width: 18rem;">
     <img src="/static/images/{{ article['image'] }}" class="card-img-top" alt="...">
     <div class="card-body">
@@ -131,13 +134,13 @@
         <p class="card-text">{{ article['description'] }}</p>
         <a href="/category/{{category}}/{{article['id']}}" class="btn btn-primary me-3">Learn more >></a>
         {% if current_user.role == 'admin' %}
-        <a href="/category/{{category}}/delete_article/{{ article['id'] }}" class="btn btn-danger mt-2 me-2">Delete</a>
-        <a href="/category/{{category}}/edit_article/{{article['id'] }}" class="btn btn-warning mt-2">Add info</a>
+        <a href="/category/{{article['category']}}/delete_article/{{ article['id'] }}" class="btn btn-danger mt-2 me-2">Delete</a>
+        <a href="/category/{{article['category']}}/edit_article/{{article['id'] }}" class="btn btn-warning mt-2">Edit</a>
         {% endif %}
     </div>
     </div>
-  {% endfor %}
-  <a href="/category" style="text-decoration: none;"> <h5>See more >> </h5> </a>
+      {% endfor %}
+</div>
 </div>
 
 {% endblock %}
