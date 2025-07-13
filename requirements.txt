@@ -1,5 +1,11 @@
 Flask
 Flask-WTF
 Flask-SQLAlchemy
-Flask-login
+Flask-Login
 gunicorn
+email-validator
+Werkzeug
+Jinja2
+WTForms
+itsdangerous
+MarkupSafe
