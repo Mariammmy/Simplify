@@ -2,13 +2,18 @@ from flask import render_template, redirect, flash, url_for
 from ext import app, db, login_manager
 from forms import RegisterForm, AddForm, LoginForm, CategoryForm, FeedbackForm
 from os import path
-from models import Article, User, Category
+from models import Article, User, Category, Feedback
 from flask_login import current_user, login_user, logout_user, login_required
 from functools import wraps
 from sqlalchemy.sql.expression import func
 
 
+login_manager.init_app(app)
 
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    flash("You must be logged in to access this page", "warning")
+    return redirect(url_for('login'))
 
 def admin_required(f):
     @wraps(f)
@@ -31,10 +36,12 @@ def home():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        new_user = User(username=form.username.data.lower(), password=form.password.data)
+        image = form.profile_image.data
+        image.save(f"static/images/{image.filename}")
+        new_user = User(username=form.username.data, password=form.password.data, profile_pic=image.filename)
         new_user.create()
         login_user(new_user)
-        flash("Signed up in successfully")
+        flash("Signed up successfully", "success")
         return redirect("/")
     return render_template("reg.html", form=form)
 
@@ -46,7 +53,7 @@ def login():
         user = User.query.filter(form.username.data == User.username).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            flash("Logged in successfully")
+            flash("Logged in successfully", "success")
             return redirect("/")
         else:
             form.username.errors.append("Invalid username or password")
@@ -81,7 +88,8 @@ def users():
 @login_required
 @admin_required
 def feedbacks():
-    return render_template("admin/feedbacks.html")
+    feedbacks = Feedback.query.all()
+    return render_template("admin/feedbacks.html", feedbacks=feedbacks)
 
 @app.route('/category')
 def categories():
@@ -131,9 +139,15 @@ def edit_category(category_id, category_name):
         image.save(directory)
         category.image = image.filename
 
+        image = form.image.data
+        if image and image.filename: 
+            directory = path.join(app.root_path, "static", "images", image.filename)
+            image.save(directory)
+            category.image = image.filename  
+
         db.session.commit()
         return redirect("/")
-    return render_template("edit_category.html", form=form, category=category_name)
+    return render_template("add_category.html", form=form, category=category_name)
 
 
 @app.route('/category/<category_name>')
@@ -194,12 +208,68 @@ def edit_article(article_id, category_name):
         image.save(directory)
         article.image = image.filename
 
+        image = form.image.data
+        if image and image.filename: 
+            directory = path.join(app.root_path, "static", "images", image.filename)
+            image.save(directory)
+            article.image = image.filename 
+
         db.session.commit()
         return redirect("/")
     return render_template("add.html", form=form, category=category_name)
 
-@app.route("/feedback")
+@app.route("/feedback", methods=['POST', 'GET'])
 @login_required
 def feedback():
-    form = FeedbackForm( user_id=current_user.id, headline = form.headline.data, message = form.message.data)
+    form = FeedbackForm()
+    if form.validate_on_submit():
+        new_feedback = Feedback( user_id=current_user.id, headline = form.headline.data, message = form.message.data)
+        Feedback.create(new_feedback)
+        flash ("Feedback sent successfully!", "success")
+        return redirect("/")
     return render_template("feedback.html", form=form)
+
+@app.route("/save_article/<int:article_id>")
+@login_required
+def save_article(article_id):
+    article = Article.query.get_or_404(article_id)
+    if article not in current_user.saved_articles:
+        current_user.saved_articles.append(article)
+        db.session.commit()
+        flash("Saved to your library", "success")
+    else:
+        flash("Already saved", "info")
+    return redirect(url_for('article_details', category_name=article.category, article_id=article.id))
+
+@app.route("/unsave_article/<int:article_id>")
+@login_required
+def unsave_article(article_id):
+    article = Article.query.get_or_404(article_id)
+    if article in current_user.saved_articles:
+        current_user.saved_articles.remove(article)
+        db.session.commit()
+        flash("Article removed from your library", "success")
+    return redirect("/library")
+
+@app.route("/delete_user/<int:user_id>")
+@login_required
+@admin_required
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        flash("User not found", "warning")
+        return redirect("/admin")
+    if user.id == current_user.id:
+        flash("You can't delete yourself", "danger")
+        return redirect("/users")
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted successfully", "success")
+    return redirect("/users") 
+
+    
+@app.route("/library")
+@login_required
+def library():
+    articles = current_user.saved_articles
+    return render_template("library.html", articles=articles)

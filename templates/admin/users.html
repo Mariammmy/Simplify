@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="display: flex; margin-bottom: 200px;">
+<div style="display: flex; margin-bottom: 200px; flex-wrap: wrap;">
 <div class="col-11 col-lg-4">
     <li>
         <a class="nav-link" href="/admin_panel"> <h4>Profile</h4> </a>
     </li>
     <br>
     <li>
-        <a class="nav-link" href="/category/admin/add-course"> <h4>Add course</h4> </a>
+        <a class="nav-link" href="/category/admin/add-course"> <h4>Add article</h4> </a>
     </li>
     <br>
     <li>
@@ -18,16 +18,20 @@
         <a class="nav-link" href="/feedbacks"><h4>Feedbacks</h4></a>
     </li>
 </div>
-<div class="col-11 col-lg-6">
+<div class="col-11 col-lg-8">
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;"> 
     {% for user in user_list%}
-    <div class="card mb-3 col-3" >
+    <div class="card" style="width: 15rem;">
+        <img src="/static/images/{{ user['profile_pic'] }}" class="card-img-top" alt="profile picture">
         <div class="card-body">
-            <h1 class="card-title">{{user['username']}}</h1>
-            <p class="card-text">{{user['role']}}</p>
-            <p class="card-text">{{user['id']}}</p>
+            <h5 class="card-title">{{user['username']}}</h5>
+            <p class="card-text">Role: {{user['role']}}</p>
+            <p class="card-text">User ID: {{user['id']}}</p>
+            <a href="/delete_user/{{ user['id'] }}" class="btn btn-danger">Delete user</a>
         </div>
     </div>
     {% endfor %}
+    </div>
 </div>
 </div>
 {% endblock %}

@@ -7,7 +7,7 @@
     </li>
     <br>
     <li>
-        <a class="nav-link" href="/category/admin/add-course"> <h4>Add course</h4> </a>
+        <a class="nav-link" href="/category/admin/add-course"> <h4>Add article</h4> </a>
     </li>
     <br>
     <li>
@@ -19,6 +19,17 @@
     </li>
 </div>
 <div class="col-11 col-lg-6">
-</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: space-evenly;">
+    {% for feedback in feedbacks %}
+    <div class="card text-bg-success mb-3" style="max-width: 18rem;">
+        <div class="card-header">User ID: {{feedback.user_id}}</div>
+        <div class="card-body">
+            <h5 class="card-title">{{feedback.headline}}</h5>
+            <p class="card-text">{{feedback.message}}</p>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+    </div>
 </div>
 {% endblock %}

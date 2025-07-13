@@ -16,6 +16,7 @@
     {% endif %}
         {% endfor %}
     </div>
+<div style="display: flex; justify-content: flex-start; gap: 30px; flex-wrap: wrap;">
     {% for article in article_list %}
     <div class="card" style="width: 18rem;">
     <img src="/static/images/{{ article['image'] }}" class="card-img-top" alt="...">
@@ -23,7 +24,8 @@
         <h5 class="card-title">{{ article['heading'] }}</h5>
         <h6 class="card-title">{{ article['category'] }}</h6>
         <p class="card-text">{{ article['description'] }}</p>
-        <a href="/category/{{category}}/{{article['id']}}" class="btn btn-primary me-3">Learn more >></a>
+        <a href="/category/{{ article['category'] }}/{{article['id']}}" class="btn btn-primary me-3">Learn more >></a>
+         <a href="/save_article/{{ article['id'] }}" class="btn btn-light me-3" style="margin-top: 0.5rem;">Add to library</a>
         {% if current_user.role == 'admin' %}
         <a href="/category/{{ article['category'] }}/delete_article/{{ article['id'] }}" class="btn btn-danger mt-2 me-2">Delete</a>
         <a href="/category/{{ article['category'] }}/edit_article/{{article['id'] }}" class="btn btn-warning mt-2">Add info</a>
@@ -31,6 +33,6 @@
     </div>
     </div>
     {% endfor %}
-
+</div>
 </div>
 {% endblock %}

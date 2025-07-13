@@ -1,5 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div class="center">
+  <br>
+    <form class="col-lg-5" method="post" enctype="multipart/form-data">
+      {% for errors in form.errors.values() %}
+        {% for error in errors %}
+        <div class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
+        {% endfor %}
+      {% endfor %}
+      {{ form.hidden_tag() }}
+      <h4 style="display: flex; justify-self: center;">Send Feedback</h4>
+      <br>
+      <div class="mb-3 row">
+          {{ form.headline(class="form-control", placeholder=form.headline.label.text) }}
+        </div>
+      <div class="mb-3 row">
+          {{ form.message(class="form-control", placeholder=form.message.label.text,  rows=4) }}
+        </div>
+        <br>
+      <div class="mb-3 row">
+          {{ form.submit_button(class="btn btn-success", placeholder=form.submit_button.label.text) }}
+        </div>
+          <br>
+          <br>
+      </form>
+</div>
 {% endblock %}

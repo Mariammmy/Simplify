@@ -1,17 +1,38 @@
 {% extends "base.html "%}
 
 {% block content %}
-<h1> {{ article['heading'] }} </h1>
-<h5> {{ article['summary'] }}</h5>
-<h2> {{ article['Subheading1']}}</h2>
-<h6> {{ article['text1'] }}</h6>
-<h2> {{ article['Subheading2']}}</h2>
-<h6> {{ article['text2'] }}</h6>
-<h2> {{ article['Subheading3']}}</h2>
-<h6> {{ article['text3'] }}</h6>
-<h2> {{ article['Subheading4']}}</h2>
-<h6> {{ article['text4'] }}</h6>
-<h2> {{ article['Subheading5']}}</h2>
-<h6> {{ article['text5'] }}</h6>
 
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="/static/images/{{article['image']}}" class="img-fluid rounded-start" alt="article_image">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h1 class="card-title">{{ article['heading' ] }}</h1>
+        <h4 class="card-text">{{ article['description'] }}</h4>
+        <p class="card-text date"><small class="text-body-secondary">{{ article.created_at.strftime('%d/%m/%Y') }}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-8" style="font-family: 'Playfair Display', serif;">
+  <h1 style="font-family: 'My Soul', serif !important; font-size: 100px;"> {{ article['heading'] }} </h1>
+  <h5> {{ article['summary'] }}</h5>
+  <br>
+  <h2> {{ article['Subheading1']}}</h2>
+  <h6> {{ article['text1'] }}</h6>
+  <br>
+  <h2> {{ article['Subheading2']}}</h2>
+  <h6> {{ article['text2'] }}</h6>
+  <br>
+  <h2> {{ article['Subheading3']}}</h2>
+  <h6> {{ article['text3'] }}</h6>
+  <br>
+  <h2> {{ article['Subheading4']}}</h2>
+  <h6> {{ article['text4'] }}</h6>
+  <br>
+  <h2> {{ article['Subheading5']}}</h2>
+  <h6> {{ article['text5'] }}</h6>
+</div>
 {% endblock %}

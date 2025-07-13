@@ -19,7 +19,7 @@ class RegisterForm(FlaskForm):
     birthdate = DateField(validators=[DataRequired()])
     gender = RadioField("Choose gender", choices=["Female", "Male"], validators=[DataRequired()])
     def validate_username(self, field):
-        if User.query.filter_by(username=field.data.lower()).first():
+        if User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already taken, Please choose another one.')
 
     register_button = SubmitField("Sign up")
@@ -85,5 +85,6 @@ class LoginForm(FlaskForm):
 class FeedbackForm(FlaskForm):
     headline = StringField("Headline", validators=
                            [DataRequired()])
-    message = StringField("Message", validators=
+    message = TextAreaField("Message", validators=
                            [DataRequired()])
+    submit_button = SubmitField("Submit")
